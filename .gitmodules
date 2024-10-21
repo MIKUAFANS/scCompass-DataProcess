@@ -1,0 +1,3 @@
+[submodule "scimilarity"]
+	path = scimilarity
+	url = https://github.com/Genentech/scimilarity.git
