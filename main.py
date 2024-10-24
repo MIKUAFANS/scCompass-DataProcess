@@ -2,7 +2,7 @@ import glob
 import os
 
 from modules import Filter
-from modules import Annotation
+from modules import AnnotationHuman, AnnotationMouse, AnnotationOtherSpecie
 from modules import GeneMapping
 from modules import SpeciesDataProcessor
 
@@ -20,10 +20,18 @@ def data_annotation_pipeline(filtered_data_path, species_name, output_dir):
     # Step 2: Annotation
     annotation_path = "path_to_annotation_model"
     python_module_path = os.getcwd()
-    annotation_instance = Annotation(annotation_path=annotation_path, python_module_path=python_module_path)
+    homologous_gene_dir = None
+    if species_name == "human":
+        annotation_instance = AnnotationHuman(annotation_path=annotation_path, python_module_path=python_module_path)
+    elif species_name == "mouse":
+        annotation_instance = AnnotationMouse(python_module_path=python_module_path)
+    else:
+        homologous_gene_dir = "homologous_gene"
+        annotation_instance = AnnotationOtherSpecie(annotation_path=annotation_path, python_module_path=python_module_path)
     for file in glob.glob(filtered_data_path):
         annotation_instance(data=file, specie=species_name,
-                            output_dir=output_dir)  # Assuming annotate_data is the method to start annotating
+                            output_dir=output_dir,
+                            homologous_gene_dir=homologous_gene_dir)  # Assuming annotate_data is the method to start annotating
 
 
 def gene_mapping_pipeline(annotated_data_path, species_name, output_dir):
