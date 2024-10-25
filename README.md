@@ -1,5 +1,3 @@
-# scCompass-DataProcess
-
 # scRNA-seq Data Download and Analysis Pipeline
 
 ## I. Data Download
