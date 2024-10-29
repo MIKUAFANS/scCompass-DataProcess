@@ -8,8 +8,8 @@ from modules import SpeciesDataProcessor
 
 
 def data_filtering_pipeline(animal_dir, species_name, output_dir):
-    # Step 1: Gene Data Filtering
-    filter_ref_path = "path_to_filter_reference"
+    # Step: Gene Data Filtering
+    filter_ref_path = os.path.join(os.getcwd(), "gene_data", "cell_ref")
     filter_instance = Filter(ref_path=filter_ref_path)
     for file in glob.glob(animal_dir):
         filter_instance(data=file, specie=species_name,
@@ -17,7 +17,7 @@ def data_filtering_pipeline(animal_dir, species_name, output_dir):
 
 
 def data_annotation_pipeline(filtered_data_path, species_name, output_dir):
-    # Step 2: Annotation
+    # Step: Annotation
     annotation_path = "path_to_annotation_model"
     python_module_path = os.getcwd()
     homologous_gene_dir = None
@@ -26,8 +26,9 @@ def data_annotation_pipeline(filtered_data_path, species_name, output_dir):
     elif species_name == "mouse":
         annotation_instance = AnnotationMouse(python_module_path=python_module_path)
     else:
-        homologous_gene_dir = "homologous_gene"
-        annotation_instance = AnnotationOtherSpecie(annotation_path=annotation_path, python_module_path=python_module_path)
+        homologous_gene_dir = os.path.join(os.getcwd(), "gene_data", "homologous_gene")
+        annotation_instance = AnnotationOtherSpecie(annotation_path=annotation_path,
+                                                    python_module_path=python_module_path)
     for file in glob.glob(filtered_data_path):
         annotation_instance(data=file, specie=species_name,
                             output_dir=output_dir,
@@ -35,15 +36,15 @@ def data_annotation_pipeline(filtered_data_path, species_name, output_dir):
 
 
 def gene_mapping_pipeline(annotated_data_path, species_name, output_dir):
-    # Step 3: Gene Mapping
-    mapping_ref_path = "path_to_mapping_reference"
+    # Step: Gene Mapping
+    mapping_ref_path = os.path.join(os.getcwd(), "gene_data", "cell_ref")
     mapping_instance = GeneMapping(ref_path=mapping_ref_path, output_dir=output_dir)
     for file in glob.glob(annotated_data_path):
         mapping_instance(data=file, specie=species_name)  # Assuming map_data is the method to start mapping
 
 
 def gene_merging_pipeline(filter_dir, mapping_dir, species_name, output_dir, metadata_path):
-    # Step 4: Gene Merging
+    # Step: Gene Merging
     merge_instance = SpeciesDataProcessor(species_name, filter_dir, mapping_dir, output_dir, metadata_path)
 
     merge_instance()  # Assuming process is the method to start merging

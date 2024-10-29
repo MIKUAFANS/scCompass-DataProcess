@@ -4,6 +4,7 @@ import csv
 import numpy as np
 import pandas as pd
 
+
 class SpeciesDataProcessor:
     def __init__(self, specie_name, filter_dir, mapping_dir, merge_dir, metadata_path):
         """
@@ -102,7 +103,6 @@ class SpeciesDataProcessor:
         Entry point to execute the processing.
         """
         self.process()
-
 
 # Example usage for a single species
 # if __name__ == "__main__":

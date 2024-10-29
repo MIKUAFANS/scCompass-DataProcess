@@ -1,4 +1,3 @@
-import glob
 import os
 import numpy as np
 import scanpy as sc
@@ -24,7 +23,8 @@ class Filter:
             "xianchong": "Caenorhabditis_elegans", "niu": "Bos_taurus", "quan": "Canis_lupus_familiarisgsd"
         }
 
-    def load_gz_data(self, in_path):
+    @staticmethod
+    def load_gz_data(in_path):
         """
         Load data from gzipped files.
         """
@@ -80,7 +80,8 @@ class Filter:
         adata.obs['percent_mito'] = adata.obs['mito_total'] / adata.X.sum(axis=1)
         return adata[adata.obs['percent_mito'] < self.percent_mt_max]
 
-    def filter_gene_variance(self, adata, mt_list):
+    @staticmethod
+    def filter_gene_variance(adata, mt_list):
         """
         Filter cells with gene expression outside 3 standard deviations from the mean.
         """
@@ -97,7 +98,8 @@ class Filter:
         )
         return adata[keep_cells, :]
 
-    def write_logs(self, path, step, cells, success):
+    @staticmethod
+    def write_logs(path, step, cells, success):
         """
         Write logs to the specified path.
         """

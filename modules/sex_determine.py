@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 
 import pandas as pd
 
+
 class SexDetermine(ABC):
     def __init__(self, x_gene_list, y_gene_list):
         self.x_gene_list = x_gene_list
@@ -29,12 +30,15 @@ class SexDetermine(ABC):
     def determine(self, sex_determine_data):
         pass
 
+
 class HumanSexDetermine(SexDetermine):
     def __init__(self, x_gene_list=None, y_gene_list=None):
         if x_gene_list is None:
-            x_gene_list = pd.read_excel("../sex_determine_data/Homo_sapiens_chrX.xlsx")
+            x_gene_list = pd.read_excel(
+                os.path.join(os.getcwd(), "gene_data", "sex_determine_data", "Homo_sapiens_chrX.xlsx"))
         if y_gene_list is None:
-            y_gene_list = pd.read_csv("../sex_determine_data/human_Ygenelist.txt", sep=",")
+            y_gene_list = pd.read_csv(
+                os.path.join(os.getcwd(), "gene_data", "sex_determine_data", "human_Ygenelist.txt"), sep=",")
         super().__init__(x_gene_list, y_gene_list)
 
     def determine(self, sex_determine_data):
@@ -46,19 +50,23 @@ class HumanSexDetermine(SexDetermine):
             gender = "Male"
         elif (sample_x_gene['ratioX'] >= 0.000001).all() and (sample_y_gene['ratioY'] <= 0.000106).all():
             gender = "Female"
-        elif (sample_x_gene['ratioX'] > 0.000070).all() and (0.000106 < sample_y_gene['ratioY']).all() and (sample_y_gene['ratioY'] <= 0.001188).all():
+        elif (sample_x_gene['ratioX'] > 0.000070).all() and (0.000106 < sample_y_gene['ratioY']).all() and (
+                sample_y_gene['ratioY'] <= 0.001188).all():
             gender = "Mix"
         else:
             gender = "unknown"
 
         return gender
 
+
 class MouseSexDetermine(SexDetermine):
     def __init__(self, x_gene_list=None, y_gene_list=None):
         if x_gene_list is None:
-            x_gene_list = pd.read_excel("../sex_determine_data/Mus_musculus_chrX.xlsx")
+            x_gene_list = pd.read_excel(
+                os.path.join(os.getcwd(), "gene_data", "sex_determine_data", "Mus_musculus_chrX.xlsx"))
         if y_gene_list is None:
-            y_gene_list = pd.read_csv("../sex_determine_data/mouse_Ygenelist.txt", sep=",")
+            y_gene_list = pd.read_csv(
+                os.path.join(os.getcwd(), "gene_data", "sex_determine_data", "mouse_Ygenelist.txt"), sep=",")
         super().__init__(x_gene_list, y_gene_list)
 
     def determine(self, sex_determine_data):
@@ -66,13 +74,16 @@ class MouseSexDetermine(SexDetermine):
 
         if (sample_y_gene['ratioY'] >= 0.000065).all():
             gender = "Male"
-        elif (sample_x_gene['ratioX'] <= 0.000008).all() and (sample_y_gene['ratioY'] > 0.000004).all() and (sample_y_gene['ratioY'] < 0.000065).all():
+        elif (sample_x_gene['ratioX'] <= 0.000008).all() and (sample_y_gene['ratioY'] > 0.000004).all() and (
+                sample_y_gene['ratioY'] < 0.000065).all():
             gender = "Male"
-        elif (sample_x_gene['ratioX'] >= 0.000555).all() and (sample_y_gene['ratioY'] > 0.000004).all() and (sample_y_gene['ratioY'] < 0.000065).all():
+        elif (sample_x_gene['ratioX'] >= 0.000555).all() and (sample_y_gene['ratioY'] > 0.000004).all() and (
+                sample_y_gene['ratioY'] < 0.000065).all():
             gender = "Female"
         elif (sample_x_gene['ratioX'] > 0).all() and (sample_y_gene['ratioY'] <= 0.000004).all():
             gender = "Female"
-        elif (0.000008 < sample_x_gene['ratioX']).all() and (sample_x_gene['ratioX'] < 0.000555).all() and (0.000004 < sample_y_gene['ratioY']).all() and (sample_y_gene['ratioY'] < 0.000065).all():
+        elif (0.000008 < sample_x_gene['ratioX']).all() and (sample_x_gene['ratioX'] < 0.000555).all() and (
+                0.000004 < sample_y_gene['ratioY']).all() and (sample_y_gene['ratioY'] < 0.000065).all():
             gender = "Mix"
         else:
             gender = "unknown"

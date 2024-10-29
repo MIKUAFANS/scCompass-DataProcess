@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import datetime
 
+
 class GeneMapping:
     def __init__(self, ref_path, output_dir):
         """
@@ -130,8 +131,6 @@ class GeneMapping:
         Entry function to execute the transform method.
         """
         return self.transform(data, **kwargs)
-
-
 
 # if __name__ == "__main__":
 #     m_map = GeneMapping()
