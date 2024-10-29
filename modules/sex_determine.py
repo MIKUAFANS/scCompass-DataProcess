@@ -21,8 +21,8 @@ class SexDetermine(ABC):
         total_sum1 = sex_determine_data.sum(axis=1)
         y_ratio = y_gene_sum / total_sum1
 
-        sample_x_gene = pd.DataFrame(y_ratio, columns=['ratioY'])
-        sample_y_gene = pd.DataFrame(x_ratio, columns=['ratioX'])
+        sample_y_gene = pd.DataFrame(y_ratio, columns=['ratioY'])
+        sample_x_gene = pd.DataFrame(x_ratio, columns=['ratioX'])
 
         return sample_x_gene, sample_y_gene
 
