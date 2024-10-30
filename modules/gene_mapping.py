@@ -1,4 +1,3 @@
-import glob
 import os
 import numpy as np
 import pandas as pd
@@ -34,7 +33,8 @@ class GeneMapping:
 
         return sorted(core_gene_id_list)
 
-    def write_logs(self, out_path, step_num, cell_num, success):
+    @staticmethod
+    def write_logs(out_path, step_num, cell_num, success):
         """
         Write logs to the specified path.
         """

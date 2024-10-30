@@ -1,7 +1,8 @@
 import glob
 import os
+from locale import normalize
 
-from modules import Filter
+from modules import Filter, GeneDataNormalization
 from modules import AnnotationHuman, AnnotationMouse, AnnotationOtherSpecie
 from modules import GeneMapping
 from modules import SpeciesDataProcessor
@@ -15,6 +16,19 @@ def data_filtering_pipeline(animal_dir, species_name, output_dir):
         filter_instance(data=file, specie=species_name,
                         output_dir=output_dir)  # Assuming filter_data is the method to start filtering
 
+def data_normalization_pipeline(filtered_data_path, species_name, output_dir):
+    # Step: Gene Data Normalization
+    """
+    current implementation only supports human, mouse and monkey species
+    :param filtered_data_path:
+    :param species_name:
+    :param output_dir:
+    :return:
+    """
+    ref_path = os.path.join(os.getcwd(), "gene_data", "cell_ref")
+    normalization_instance = GeneDataNormalization(species_name, ref_path)
+    for file in glob.glob(filtered_data_path):
+        normalization_instance(data=file)  # Assuming normalize_data is the method to start normalizing
 
 def data_annotation_pipeline(filtered_data_path, species_name, output_dir):
     # Step: Annotation
@@ -57,11 +71,13 @@ def main(animal_dir, species_name):
         mapping_dir = "path_to_mapping_dir"
         metadata_path = "path_to_metadata"
         filtered_data_output_dir = "path_to_filtered_data_output"
+        normalized_data_output_dir = "path_to_normalized_data_output"
         annotated_data_output_dir = "path_to_annotated_data_output"
         mapping_output_dir = "path_to_mapping_output"
         merge_output_dir = "path_to_merge_output"
 
         data_filtering_pipeline(animal_dir, species_name, filtered_data_output_dir)
+        data_normalization_pipeline(filtered_data_path, species_name, normalized_data_output_dir)
         data_annotation_pipeline(filtered_data_path, species_name, annotated_data_output_dir)
         gene_mapping_pipeline(annotated_data_path, species_name, mapping_output_dir)
         gene_merging_pipeline(filtered_data_path, mapping_dir, species_name, merge_output_dir, metadata_path)
