@@ -5,8 +5,8 @@ import pandas as pd
 import anndata as ad
 import datetime
 import rpy2.robjects as robjects
-from scimilarity.utils import lognorm_counts
-from scimilarity import CellAnnotation, align_dataset
+from scimilarity.src.scimilarity.utils import lognorm_counts
+from scimilarity.src.scimilarity import CellAnnotation, align_dataset
 
 
 class AnnotationHuman:

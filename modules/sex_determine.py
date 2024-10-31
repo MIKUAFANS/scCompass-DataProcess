@@ -9,7 +9,7 @@ class SexDetermine(ABC):
         self.x_gene_list = x_gene_list
         self.y_gene_list = y_gene_list
 
-    def __data_process(self, sex_determine_data):
+    def data_process(self, sex_determine_data):
         x_gene_sum = sex_determine_data.loc[:, sex_determine_data.columns == "Xist"].sum(axis=1)
         total_sum = sex_determine_data.sum(axis=1)
         x_ratio = x_gene_sum / total_sum
@@ -42,21 +42,25 @@ class HumanSexDetermine(SexDetermine):
         super().__init__(x_gene_list, y_gene_list)
 
     def determine(self, sex_determine_data):
-        sample_x_gene, sample_y_gene = self.__data_process(sex_determine_data)
+        sample_x_gene, sample_y_gene = self.data_process(sex_determine_data)
+        gender_determine_result = []
 
-        if (sample_y_gene['ratioY'] >= 0.001188).all():
-            gender = "Male"
-        elif (sample_x_gene['ratioX'] <= 0.000070).all() and (sample_y_gene['ratioY'] > 0.000106).all():
-            gender = "Male"
-        elif (sample_x_gene['ratioX'] >= 0.000001).all() and (sample_y_gene['ratioY'] <= 0.000106).all():
-            gender = "Female"
-        elif (sample_x_gene['ratioX'] > 0.000070).all() and (0.000106 < sample_y_gene['ratioY']).all() and (
-                sample_y_gene['ratioY'] <= 0.001188).all():
-            gender = "Mix"
-        else:
-            gender = "unknown"
+        for idx in range(sample_x_gene.shape[0]):
+            if (sample_y_gene.loc[idx, 'ratioY'] >= 0.001188).all():
+                gender = "Male"
+            elif (sample_x_gene.loc[idx, 'ratioX'] <= 0.000070).all() and (sample_y_gene.loc[idx, 'ratioY'] > 0.000106).all():
+                gender = "Male"
+            elif (sample_x_gene.loc[idx, 'ratioX'] >= 0.000001).all() and (sample_y_gene.loc[idx, 'ratioY'] <= 0.000106).all():
+                gender = "Female"
+            elif (sample_x_gene.loc[idx, 'ratioX'] > 0.000070).all() and (0.000106 < sample_y_gene.loc[idx, 'ratioY']).all() and (
+                    sample_y_gene.loc[idx, 'ratioY'] <= 0.001188).all():
+                gender = "Mix"
+            else:
+                gender = "unknown"
 
-        return gender
+            gender_determine_result.append(gender)
+
+        return gender_determine_result
 
 
 class MouseSexDetermine(SexDetermine):
@@ -70,22 +74,26 @@ class MouseSexDetermine(SexDetermine):
         super().__init__(x_gene_list, y_gene_list)
 
     def determine(self, sex_determine_data):
-        sample_x_gene, sample_y_gene = self.__data_process(sex_determine_data)
+        sample_x_gene, sample_y_gene = self.data_process(sex_determine_data)
+        gender_determine_result = []
 
-        if (sample_y_gene['ratioY'] >= 0.000065).all():
-            gender = "Male"
-        elif (sample_x_gene['ratioX'] <= 0.000008).all() and (sample_y_gene['ratioY'] > 0.000004).all() and (
-                sample_y_gene['ratioY'] < 0.000065).all():
-            gender = "Male"
-        elif (sample_x_gene['ratioX'] >= 0.000555).all() and (sample_y_gene['ratioY'] > 0.000004).all() and (
-                sample_y_gene['ratioY'] < 0.000065).all():
-            gender = "Female"
-        elif (sample_x_gene['ratioX'] > 0).all() and (sample_y_gene['ratioY'] <= 0.000004).all():
-            gender = "Female"
-        elif (0.000008 < sample_x_gene['ratioX']).all() and (sample_x_gene['ratioX'] < 0.000555).all() and (
-                0.000004 < sample_y_gene['ratioY']).all() and (sample_y_gene['ratioY'] < 0.000065).all():
-            gender = "Mix"
-        else:
-            gender = "unknown"
+        for idx in range(sample_x_gene.shape[0]):
+            if (sample_y_gene.loc[idx, 'ratioY'] >= 0.000065).all():
+                gender = "Male"
+            elif (sample_x_gene.loc[idx, 'ratioX'] <= 0.000008).all() and (sample_y_gene.loc[idx, 'ratioY'] > 0.000004).all() and (
+                    sample_y_gene.loc[idx, 'ratioY'] < 0.000065).all():
+                gender = "Male"
+            elif (sample_x_gene.loc[idx, 'ratioX'] >= 0.000555).all() and (sample_y_gene.loc[idx, 'ratioY'] > 0.000004).all() and (
+                    sample_y_gene.loc[idx, 'ratioY'] < 0.000065).all():
+                gender = "Female"
+            elif (sample_x_gene.loc[idx, 'ratioX'] > 0).all() and (sample_y_gene.loc[idx, 'ratioY'] <= 0.000004).all():
+                gender = "Female"
+            elif (0.000008 < sample_x_gene.loc[idx, 'ratioX']).all() and (sample_x_gene.loc[idx, 'ratioX'] < 0.000555).all() and (
+                    0.000004 < sample_y_gene.loc[idx, 'ratioY']).all() and (sample_y_gene.loc[idx, 'ratioY'] < 0.000065).all():
+                gender = "Mix"
+            else:
+                gender = "unknown"
 
-        return gender
+            gender_determine_result.append(gender)
+
+        return gender_determine_result
